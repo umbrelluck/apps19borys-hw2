@@ -24,7 +24,7 @@ public class ImmutableLinkedList implements ImmutableList {
             return 0;
         }
         ImmutableLinkedList index = this;
-        int i = 1;
+        int i = 0;
         while (index != null) {
             index = index.next;
             i += 1;
@@ -33,11 +33,11 @@ public class ImmutableLinkedList implements ImmutableList {
     }
 
     public ImmutableLinkedList last() {
-        ImmutableLinkedList last_elem = this;
-        while (last_elem.next != null) {
-            last_elem = last_elem.next;
+        ImmutableLinkedList lastElem = this;
+        while (lastElem.next != null) {
+            lastElem = lastElem.next;
         }
-        return last_elem;
+        return lastElem;
     }
 
     private ImmutableLinkedList copy() {
@@ -65,9 +65,9 @@ public class ImmutableLinkedList implements ImmutableList {
             newElem.value = e;
             return newElem;
         }
-        ImmutableLinkedList last_elem = newElem.last();
-        last_elem.next = new ImmutableLinkedList(e);
-        last_elem.next.previous = last_elem;
+        ImmutableLinkedList lastElem = newElem.last();
+        lastElem.next = new ImmutableLinkedList(e);
+        lastElem.next.previous = lastElem;
         return newElem;
     }
 
@@ -76,19 +76,29 @@ public class ImmutableLinkedList implements ImmutableList {
         if (index > size()) {
             throw new IndexOutOfBoundsException();
         }
-        ImmutableLinkedList newElem = copy();
-        ImmutableLinkedList index_elem = newElem;
-        int i = 0;
-        while (i < index && index_elem.next != null) {
-            i++;
-            index_elem = index_elem.next;
+        if (index == size()) {
+            return add(e);
         }
-        ImmutableLinkedList tail = index_elem.next;
-        index_elem.next = new ImmutableLinkedList(e);
-        index_elem.next.previous = index_elem;
+        ImmutableLinkedList newElem = copy();
+        if (index == 0) {
+            ImmutableLinkedList fe = new ImmutableLinkedList(e);
+            fe.next = newElem;
+            newElem.previous = fe;
+            newElem = newElem.previous;
+        } else {
+            ImmutableLinkedList indexElem = newElem;
+            int i = 0;
+            while (i < index - 1 && indexElem.next != null) {
+                i++;
+                indexElem = indexElem.next;
+            }
+            ImmutableLinkedList tail = indexElem.next;
+            indexElem.next = new ImmutableLinkedList(e);
+            indexElem.next.previous = indexElem;
 
-        index_elem.next.next = tail;
-        tail.previous = index_elem.next;
+            indexElem.next.next = tail;
+            tail.previous = indexElem.next;
+        }
         return newElem;
     }
 
@@ -104,7 +114,7 @@ public class ImmutableLinkedList implements ImmutableList {
     @Override
     public ImmutableLinkedList addAll(int index, Object[] c) {
         ImmutableLinkedList newElem = copy();
-        int i = 0;
+        int i = index;
         for (Object elem : c) {
             newElem = newElem.add(i, elem);
             i++;
@@ -118,12 +128,12 @@ public class ImmutableLinkedList implements ImmutableList {
             throw new IndexOutOfBoundsException();
         }
         int i = 0;
-        ImmutableLinkedList ind_elem = this;
+        ImmutableLinkedList indElem = this;
         while (i != index) {
             i++;
-            ind_elem = ind_elem.next;
+            indElem = indElem.next;
         }
-        return ind_elem.value;
+        return indElem.value;
     }
 
     private ImmutableLinkedList helperInd(ImmutableLinkedList newElem,
@@ -131,29 +141,34 @@ public class ImmutableLinkedList implements ImmutableList {
         if (index >= size()) {
             throw new IndexOutOfBoundsException();
         }
-        ImmutableLinkedList ind_elem = newElem;
+        ImmutableLinkedList indElem = newElem;
         int i = 0;
         while (i != index) {
             i++;
-            ind_elem = ind_elem.next;
+            indElem = indElem.next;
         }
-        return ind_elem;
+        return indElem;
     }
 
     @Override
     public ImmutableLinkedList remove(int index) {
         ImmutableLinkedList newElem = copy();
-        ImmutableLinkedList ind_elem = helperInd(newElem, index);
-        ind_elem.previous.next = ind_elem.next;
-        ind_elem.next.previous = ind_elem.previous;
+        if (index == 0) {
+            return newElem.next;
+        }
+        ImmutableLinkedList indElem = helperInd(newElem, index);
+        indElem.previous.next = indElem.next;
+        if (indElem.next != null) {
+            indElem.next.previous = indElem.previous;
+        }
         return newElem;
     }
 
     @Override
     public ImmutableLinkedList set(int index, Object e) {
         ImmutableLinkedList newElem = copy();
-        ImmutableLinkedList ind_elem = helperInd(newElem, index);
-        ind_elem.value = e;
+        ImmutableLinkedList indElem = helperInd(newElem, index);
+        indElem.value = e;
         return newElem;
     }
 

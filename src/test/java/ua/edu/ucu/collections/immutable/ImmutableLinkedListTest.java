@@ -20,6 +20,7 @@ public class ImmutableLinkedListTest {
 
     @Test
     public void size() {
+        int i = list.size();
         assertEquals(3, list.size());
         assertEquals(0, empty.size());
     }
@@ -27,8 +28,8 @@ public class ImmutableLinkedListTest {
     @Test
     public void last() {
         ImmutableLinkedList lst = new ImmutableLinkedList(10);
-        ImmutableLinkedList new_elem = list.add(lst);
-        assertEquals(lst, new_elem.last());
+        ImmutableLinkedList newElem = list.add(10);
+        assertArrayEquals(lst.toArray(), newElem.last().toArray());
         assertEquals(empty, empty.last());
 
     }
@@ -54,7 +55,7 @@ public class ImmutableLinkedListTest {
     @Test
     public void addAll() {
         Object[] addable = {3, 4, 5, 6};
-        ImmutableLinkedList lst = list.add(addable);
+        ImmutableLinkedList lst = list.addAll(addable);
         Object[] exp = {0, 1, 2, 3, 4, 5, 6};
         assertArrayEquals(exp, lst.toArray());
     }
@@ -62,7 +63,7 @@ public class ImmutableLinkedListTest {
     @Test
     public void testAddAll() {
         Object[] addable = {3, 4, 5, 6};
-        ImmutableLinkedList lst = list.add(2, addable);
+        ImmutableLinkedList lst = list.addAll(2, addable);
         Object[] exp = {0, 1, 3, 4, 5, 6, 2};
         assertArrayEquals(exp, lst.toArray());
     }
@@ -110,7 +111,7 @@ public class ImmutableLinkedListTest {
     @Test
     public void toArray() {
         Object[] add = {5, 6, 7, 8, 9, 4};
-        ImmutableLinkedList lst = list.add(1, add);
+        ImmutableLinkedList lst = list.addAll(1, add);
         Object[] exp = {0, 5, 6, 7, 8, 9, 4, 1, 2};
         assertArrayEquals(exp, lst.toArray());
     }
@@ -118,7 +119,7 @@ public class ImmutableLinkedListTest {
     @Test
     public void testToString() {
         Object[] add = {5, 6, 7, 8, 9, 4};
-        ImmutableLinkedList lst = list.add(1, add);
+        ImmutableLinkedList lst = list.addAll(1, add);
         assertEquals("0, 5, 6, 7, 8, 9, 4, 1, 2", lst.toString());
     }
 
