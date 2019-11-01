@@ -1,11 +1,8 @@
 package ua.edu.ucu.collections.immutable;
 
-import javax.swing.plaf.IconUIResource;
 import java.util.Arrays;
 
 public class ImmutableArrayList implements ImmutableList {
-
-    private static final int CP = 20;
     private int size_r;
     private int capacity;
     private Object[] array;

@@ -2,10 +2,10 @@ package ua.edu.ucu.collections.immutable;
 
 import java.lang.reflect.Array;
 
-public class ImmutableLinkedList implements ImmutableList, Cloneable {
+public class ImmutableLinkedList implements ImmutableList {
 
-    public Object value;
-    public ImmutableLinkedList next;
+    private Object value;
+    private ImmutableLinkedList next;
     private ImmutableLinkedList previous;
 
     public ImmutableLinkedList() {
@@ -187,7 +187,7 @@ public class ImmutableLinkedList implements ImmutableList, Cloneable {
         ImmutableLinkedList iter = this;
         int sz = size();
         if (sz == 0) {
-            return null;
+            return new Object[0];
         }
         Object[] array = new Array[size()];
         for (int i = 0; i < sz; i++, iter = iter.next) {
