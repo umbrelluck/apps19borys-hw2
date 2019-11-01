@@ -21,14 +21,15 @@ public class ImmutableArrayList implements ImmutableList {
 
     private ImmutableArrayList copy() {
         ImmutableArrayList new_elem = new ImmutableArrayList(capacity);
-        new_elem.array = Arrays.copyOf(array, size_r);
+        new_elem.array = Arrays.copyOf(array, capacity);
+        new_elem.size_r = size_r;
         return new_elem;
     }
 
     @Override
     public ImmutableArrayList add(Object e) {
         ImmutableArrayList new_elem = copy();
-        if (isEmpty()) {
+        if (canFit()) {
             new_elem.array[size_r] = e;
             new_elem.size_r++;
         } else {
@@ -45,7 +46,10 @@ public class ImmutableArrayList implements ImmutableList {
         if (index >= size_r) {
             throw new IndexOutOfBoundsException();
         } else {
-            if (isEmpty()) {
+            for (int i = size_r; i > index; i--) {
+                new_elem.array[i] = new_elem.array[i - 1];
+            }
+            if (canFit()) {
                 new_elem.array[index] = e;
                 new_elem.size_r++;
             } else {
@@ -90,9 +94,23 @@ public class ImmutableArrayList implements ImmutableList {
 
     @Override
     public ImmutableArrayList remove(int index) {
-        ImmutableArrayList new_elem = copy();
+//        ImmutableArrayList new_elem = copy();
         if (index < size_r) {
-            new_elem.array[index] = null;
+//            new_elem.array[index] = null;
+//            for (int i = index; i < size_r - 1; i++) {
+//                new_elem.array[i] = new_elem.array[i + 1];
+//            }
+//            size_r -= 1;
+//            new_elem.array[size_r] = null;
+//            return new_elem;
+            ImmutableArrayList new_elem = new ImmutableArrayList(capacity);
+            for (int i = 0; i < index; i++) {
+                new_elem.array[i] = array[i];
+            }
+            for (int i = index; i < size_r - 1; i++) {
+                new_elem.array[i] = array[i + 1];
+            }
+            new_elem.size_r = size_r - 1;
             return new_elem;
         }
         throw new IndexOutOfBoundsException();
@@ -128,8 +146,7 @@ public class ImmutableArrayList implements ImmutableList {
         return new ImmutableArrayList(capacity);
     }
 
-    @Override
-    public boolean isEmpty() {
+    private boolean canFit() {
         return size_r != capacity;
     }
 
@@ -149,5 +166,10 @@ public class ImmutableArrayList implements ImmutableList {
             }
         }
         return str.toString();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size_r == 0;
     }
 }
