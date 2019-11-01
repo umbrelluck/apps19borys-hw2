@@ -42,7 +42,7 @@ public class ImmutableLinkedList implements ImmutableList {
         return last_elem;
     }
 
-    public ImmutableLinkedList copy() {
+    private ImmutableLinkedList copy() {
         ImmutableLinkedList new_elem = new ImmutableLinkedList();
         ImmutableLinkedList new_elem_iter = new_elem;
         ImmutableLinkedList this_iterator = this;
@@ -128,7 +128,8 @@ public class ImmutableLinkedList implements ImmutableList {
         return ind_elem.value;
     }
 
-    ImmutableLinkedList helper_ind(ImmutableLinkedList new_elem, int index) {
+    private ImmutableLinkedList helper_ind(ImmutableLinkedList new_elem,
+                                       int index) {
         if (index >= size()) {
             throw new IndexOutOfBoundsException();
         }
