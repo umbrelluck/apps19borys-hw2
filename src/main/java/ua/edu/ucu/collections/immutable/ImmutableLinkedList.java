@@ -152,6 +152,9 @@ public class ImmutableLinkedList implements ImmutableList {
 
     @Override
     public ImmutableLinkedList remove(int index) {
+        if (index >= size() || index == -1) {
+            throw new IndexOutOfBoundsException();
+        }
         ImmutableLinkedList newElem = copy();
         if (index == 0) {
             return newElem.next;

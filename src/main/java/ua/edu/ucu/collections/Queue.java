@@ -26,4 +26,13 @@ public class Queue {
     public void enqueue(Object e) {
         array = array.addLast(e);
     }
+
+    @Override
+    public String toString() {
+        return array.toString();
+    }
+
+    public Object[] toArray() {
+        return array.toArray();
+    }
 }

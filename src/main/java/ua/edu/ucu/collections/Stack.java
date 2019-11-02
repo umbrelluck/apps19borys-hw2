@@ -27,4 +27,12 @@ public class Stack {
     public void push(Object e) {
         array = array.addLast(e);
     }
+
+    public String toString() {
+        return array.toString();
+    }
+
+    public Object[] toArray() {
+        return array.toArray();
+    }
 }
