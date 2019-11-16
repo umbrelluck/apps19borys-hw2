@@ -180,7 +180,7 @@ public class ImmutableLinkedList implements ImmutableList {
         int i = 0;
         ImmutableLinkedList indexof = this;
         while (indexof != null) {
-            if (indexof.value == e) {
+            if (indexof.value.equals(e)) {
                 return i;
             }
             i++;

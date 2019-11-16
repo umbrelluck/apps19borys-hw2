@@ -7,6 +7,12 @@ public class ImmutableArrayList implements ImmutableList {
     private int capacity;
     private Object[] array;
 
+    public ImmutableArrayList() {
+        sizeR = 0;
+        capacity = 2;
+        array = new Object[2];
+    }
+
     public ImmutableArrayList(int cap) {
         sizeR = 0;
         capacity = cap;
@@ -15,7 +21,8 @@ public class ImmutableArrayList implements ImmutableList {
 
     private ImmutableArrayList resize() {
         ImmutableArrayList newElem = new ImmutableArrayList(capacity * 2);
-        newElem.array = Arrays.copyOf(array, sizeR);
+        newElem.array = Arrays.copyOf(array, newElem.capacity);
+        newElem.sizeR = sizeR;
         return newElem;
     }
 
@@ -43,22 +50,22 @@ public class ImmutableArrayList implements ImmutableList {
     @Override
     public ImmutableArrayList add(int index, Object e) {
         ImmutableArrayList newElem = copy();
-        if (index >= sizeR) {
+        if (index > sizeR) {
             throw new IndexOutOfBoundsException();
+        }
+        if (index == sizeR) {
+            return add(e);
         } else {
+            if (!canFit()) {
+                newElem = newElem.resize();
+            }
             for (int i = sizeR; i > index; i--) {
                 newElem.array[i] = newElem.array[i - 1];
             }
-            if (canFit()) {
-                newElem.array[index] = e;
-                newElem.sizeR++;
-            } else {
-                newElem = newElem.resize();
-                newElem.array[index] = e;
-                newElem.sizeR++;
-            }
+            newElem.array[index] = e;
+            newElem.sizeR++;
+            return newElem;
         }
-        return newElem;
     }
 
     @Override
@@ -129,7 +136,7 @@ public class ImmutableArrayList implements ImmutableList {
     @Override
     public int indexOf(Object e) {
         for (int i = 0; i < sizeR; ++i) {
-            if (array[i] == e) {
+            if (array[i].equals(e)) {
                 return i;
             }
         }
