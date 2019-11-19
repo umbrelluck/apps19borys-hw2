@@ -2,7 +2,7 @@ package ua.edu.ucu.collections.immutable;
 
 import java.util.Arrays;
 
-public class ImmutableArrayList implements ImmutableList {
+public final class ImmutableArrayList implements ImmutableList {
     private int sizeR;
     private int capacity;
     private Object[] array;
